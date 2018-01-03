@@ -20,7 +20,9 @@ public class UsersGetter {
 			String username = System.getenv("POSTGRESQL_USER");
 			String password = System.getenv("PGPASSWORD");
 			Connection connection = DriverManager.getConnection(databaseURL, username, password);
+			//Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/testdb?currentSchema=testdb&user=postgres&password=postgres");
 			if (connection != null) {
+				log.info("got connection retrieve data from database...");
 				String SQL = "select * from users";
 				Statement stmt = connection.createStatement();
 				ResultSet rs = stmt.executeQuery(SQL);
@@ -29,6 +31,9 @@ public class UsersGetter {
 					user.setFirstName(rs.getString("firstname"));
 					user.setLastName(rs.getString("lastname"));
 				}
+				log.info("age of current user: "+user.getAge());
+				rs.close();
+				connection.close();
 			}
 		} catch (Exception e) {
 			log.info(e.getMessage());
